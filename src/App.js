@@ -6,10 +6,25 @@ function App() {
   const [data, setData] = useState(faqQuestions);
   const [SearchItem, setSearchItem] = useState(null);
   const handleInput = (e) => {
+    var key = e.keyCode || e.charCode;
+    console.log(key);
+    if (key == 8 || key == 46) {
+      setData(faqQuestions);
+    }
     setSearchItem(e.target.value);
-    setData(faqQuestions);
+    const requestedData = faqQuestions.find((faqQuestion) => {
+      let string1 = faqQuestion.Answer.toLowerCase();
+      let string2 = e.target.value.toLowerCase();
+      if (string1.includes(string2)) {
+        return faqQuestion;
+      }
+    });
+    if (requestedData) {
+      setData([requestedData]);
+    } else {
+      setData(faqQuestions);
+    }
   };
-
   const handleSumbit = () => {
     if (SearchItem !== null) {
       const requestData = faqQuestions.filter((faqQuestion) => {
@@ -33,7 +48,7 @@ function App() {
               <input
                 type="text"
                 className="form-control mx-1"
-                onChange={handleInput}
+                onKeyUp={handleInput}
               ></input>
             </div>
             <div className="col-md-2">
@@ -46,7 +61,7 @@ function App() {
           </div>
           <div className="row p-1">
             <div className="col-md-10">
-              <Accordion data={data} />
+              <Accordion data={data} SearchItem={SearchItem} />
             </div>
           </div>
         </div>
