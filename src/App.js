@@ -7,9 +7,10 @@ function App() {
   const [SearchItem, setSearchItem] = useState(null);
   const handleInput = (e) => {
     var key = e.keyCode || e.charCode;
-    console.log(key);
+
     if (key == 8 || key == 46) {
       setData(faqQuestions);
+      return;
     }
     setSearchItem(e.target.value);
     const requestedData = faqQuestions.find((faqQuestion) => {
@@ -19,12 +20,15 @@ function App() {
         return faqQuestion;
       }
     });
+
     if (requestedData) {
       setData([requestedData]);
     } else {
       setData(faqQuestions);
     }
   };
+
+  console.log(data);
   const handleSumbit = () => {
     if (SearchItem !== null) {
       const requestData = faqQuestions.filter((faqQuestion) => {
